@@ -1,0 +1,78 @@
+* {
+    border: none;
+    font-size: 15px;
+    font-family: JetBrainsMono Nerd Font;
+    color: white;
+    
+}
+
+window#waybar {
+/*    background: transparent;*/
+    background: rgba(0, 0, 0, 0.0);
+ }
+
+.modules-right {
+  /* border: 1px solid lighter(@active); */
+  /* border: 1px solid @active; */
+  border-radius: 10px;
+  padding: 0px 15px;
+  margin: 2px 5px;
+  background: rgba(000, 000, 000, 0.8);
+}
+
+.modules-center {
+  /* border: 1px solid lighter(@active); */
+  /* border: 1px solid @active; */
+  padding: 0 15px;
+  margin: 2px 0px;
+/*  border-radius: 15px 15px 15px 15px; */
+    border-radius: 10px;
+  background: rgba(000, 000, 000, 0.8);
+}
+
+.modules-left {
+  /* border: 1px solid lighter(@active); */
+  /* border: 1px solid @active; */
+  padding: 0px 30px;
+  border-radius: 10px;
+  margin: 2px 5px;
+  background: rgba(000, 000, 000, 0.8);
+}
+
+#bluetooth {
+    font-size: 18px;
+    padding: 0px 2px;
+}
+
+#battery{
+    font-size: 17px;
+    padding: 0 10px;
+}
+
+#network,
+#backlight {
+    padding: 0 5px;
+    font-size: 18px;
+
+}
+
+#workspaces button {
+  border-radius: 1px;
+}
+
+#workspaces button.active {
+    border-bottom: solid 2px;
+}
+
+
+
+#pulseaudio
+{
+    font-size: 17px;
+    padding: 0px 0px;
+}
+
+#mpris {
+    font-size: 13px;
+    padding: 0 13px;
+}
