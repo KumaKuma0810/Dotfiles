@@ -1,26 +1,34 @@
-@import "~/.cache/wal/colors-rofi-dark.rasi"
+@import "~/.cache/wal/colors-rofi-light.rasi"
+/**
+ *
+ * Author : Aditya Shakya (adi1090x)
+ * Github : @adi1090x
+ * 
+ * Rofi Theme File
+ * Rofi Version: 1.7.3
+ **/
 
 /*****----- Configuration -----*****/
 configuration {
-	modi:                   "drun,run,filebrowser";
-    show-icons:                 true;
-    display-drun:               "APPS";
-    display-run:                "RUN";
-    display-filebrowser:        "FILES";
-    display-window:             "WINDOW";
+	modi:                       "drun,run,filebrowser,window";
+    show-icons:                 false;
+    display-drun:               "";
+    display-run:                "";
+    display-filebrowser:        "";
+    display-window:             "";
 	drun-display-format:        "{name}";
 	window-format:              "{w} · {c} · {t}";
 }
 
 /*****----- Global Properties -----*****/
 * {
-    font:                        "Fira Code Medium 10";
-    background:                  #39444B;
-    background-alt:              #E9E9E9;
-    foreground:                  #161616;
-    selected:                    #323D43;
-    active:                      #999999;
-    urgent:                      #323D43;
+    font:                        "JetBrains Mono Nerd Font 10";
+    background:                  #0d0a06;
+    background-alt:              #252525;
+    foreground:                  #c7c1c4;
+    selected:                    #A23B2E;
+    active:                      #909090;
+    urgent:                      #c7c1c4;
 }
 
 /*****----- Main Window -----*****/
@@ -30,13 +38,16 @@ window {
     location:                    center;
     anchor:                      center;
     fullscreen:                  false;
-    width:                       800px;
+    width:                       450px;
     x-offset:                    0px;
     y-offset:                    0px;
+
     /* properties for all widgets */
     enabled:                     true;
     border-radius:               5px;
     cursor:                      "default";
+    background-color:            @background;
+
 }
 
 /*****----- Main Box -----*****/
@@ -44,66 +55,60 @@ mainbox {
     enabled:                     true;
     spacing:                     0px;
     background-color:            transparent;
-    orientation:                 horizontal;
-    children:                    [ "imagebox", "listbox" ];
-}
-
-imagebox {
-    padding:                     50px;
-    background-color:            transparent;
-    background-image:            url("~/.config/hypr/n-rn_TY0CSU.jpg", height);
     orientation:                 vertical;
-    children:                    [ "inputbar", "dummy", "mode-switcher" ];
+    children:                    [ "inputbar", "listbox" ];
 }
 
 listbox {
     spacing:                     20px;
-    padding:                     20px;
+    padding:                     10px;
     background-color:            transparent;
     orientation:                 vertical;
-    children:                    [ "message", "listview" ];
-}
-
-dummy {
-    background-color:            transparent;
+    children:                    [ "message", "listview", "mode-switcher" ];
 }
 
 /*****----- Inputbar -----*****/
 inputbar {
     enabled:                     true;
-    padding:                     15px;
-    border-radius:               5px;
-    background-color:            @background-alt;
-
+    spacing:                     20px;
+    padding:                     360px 20px 30px 20px;
+    background-color:            transparent;
+    background-image:            url("~/.config/rofi/2de07e9204db103d2bec92b70b2d7d43.jpg", width);
     text-color:                  @foreground;
-    children:                    [ "textbox-prompt-colon", "entry" ];
+    orientation:                 horizontal;
+    children:                    [ "entry" ];
 }
-textbox-prompt-colon {
+/*textbox-prompt-colon {
     enabled:                     true;
     expand:                      false;
     str:                         " ";
-    background-color:            inherit;
+    padding:                     15px 24px;
+    border-radius:               5px;
+    background-color:            @background-alt;
     text-color:                  inherit;
-}
+}*/
 entry {
     enabled:                     true;
-    background-color:            inherit;
+    expand:                      true;
+    padding:                     15px 20px;
+    border-radius:               10px;
+    background-color:            #69261e;
     text-color:                  inherit;
     cursor:                      text;
-    placeholder:                 "Search";
+    placeholder:                 "Search...";
     placeholder-color:           inherit;
 }
 
 /*****----- Mode Switcher -----*****/
 mode-switcher{
     enabled:                     true;
-    spacing:                     20px;
+    spacing:                     10px;
     background-color:            transparent;
     text-color:                  @foreground;
 }
 button {
-    padding:                     15px;
-    border-radius:               50px;
+    padding:                     12px;
+    border-radius:               5px;
     background-color:            @background-alt;
     text-color:                  inherit;
     cursor:                      pointer;
@@ -117,7 +122,7 @@ button selected {
 listview {
     enabled:                     true;
     columns:                     1;
-    lines:                       8;
+    lines:                       5;
     cycle:                       true;
     dynamic:                     true;
     scrollbar:                   false;
@@ -135,9 +140,9 @@ listview {
 /*****----- Elements -----*****/
 element {
     enabled:                     true;
-    spacing:                     15px;
-    padding:                     8px;
-    border-radius:               10px;
+    spacing:                     10px;
+    padding:                     12px;
+    border-radius:               5px;
     background-color:            transparent;
     text-color:                  @foreground;
     cursor:                      pointer;
@@ -169,7 +174,7 @@ element selected.active {
 element-icon {
     background-color:            transparent;
     text-color:                  inherit;
-    size:                        32px;
+    size:                        40px;
     cursor:                      inherit;
 }
 element-text {
@@ -185,8 +190,8 @@ message {
     background-color:            transparent;
 }
 textbox {
-    padding:                     15px;
-    border-radius:               40px;
+    padding:                     12px;
+    border-radius:               100%;
     background-color:            @background-alt;
     text-color:                  @foreground;
     vertical-align:              0.5;
@@ -194,7 +199,7 @@ textbox {
 }
 error-message {
     padding:                     15px;
-    border-radius:               20px;
+    border-radius:               5px;
     background-color:            @background;
     text-color:                  @foreground;
 }
