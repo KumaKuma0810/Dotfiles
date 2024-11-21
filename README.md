@@ -1,4 +1,4 @@
-<p> <center> ---------------------------------------------------------------------------------------WELCOME---------------------------------------------------------------------------------------</center> </p>
+<p> WELCOME  </p>
 
 ![Screenshot_2024-11-21_12 20 55](https://github.com/user-attachments/assets/cdf57c34-fa09-4d9a-aa9d-d26207ba0751)
 ![Screenshot_2024-11-21_12 24 08](https://github.com/user-attachments/assets/244a7a7a-0692-41c5-9187-dc4263746e47)
