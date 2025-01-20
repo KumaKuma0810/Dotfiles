@@ -1,7 +1,11 @@
 {
-    "layer": "top",
+    "layer": "bottom",
     "position": "top",
-    "spacing": 1,
+    "spacing": 0,
+    "margin-bottom": 0,
+    "margin-top": 5,
+    "margin-left": 7,
+    "margin-right": 7,
     "height": 30,
     "modules-left": [
         "hyprland/workspaces"
@@ -11,6 +15,7 @@
     ],
     "modules-right": [
         "tray",
+	"backlight",
 	"wireplumber",
         "network",
         "battery",
