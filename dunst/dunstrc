@@ -1,0 +1,30 @@
+[global]
+    font = JetBrainsMono Nerd Font 10
+    frame_color = "#3D6582"
+    separator_color = frame
+    background = "#040812"
+    foreground = "#b5c6d7"
+    corner_radius = 1
+    transparency = 0
+    padding = 15
+    horizontal_padding = 10
+    frame_width = 3
+    separator_height = 2
+    idle_threshold = 120
+    alignment = center
+    vertical_alignment = center
+
+[urgency_low]
+    background = "#040812"
+    foreground = "#738BA1"
+    frame_color = "#4E5D6B"
+
+[urgency_normal]
+    background = "#040812"
+    foreground = "#b5c6d7"
+    frame_color = "#3D6582"
+
+[urgency_critical]
+    background = "#040812"
+    foreground = "#837F7A"
+    frame_color = "#365267"
