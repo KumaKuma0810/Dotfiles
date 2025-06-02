@@ -208,7 +208,7 @@ bindsym $mod+r mode "resize"
 focus_follows_mouse no
 
 # Autostart
-exec --no-startup-id feh --bg-scale ~/Pictures/moiz-k-malik-68aXi4RVhMQ-unsplash.jpg
+exec --no-startup-id feh --bg-scale ~/.config/i3/moiz-k-malik-68aXi4RVhMQ-unsplash.jpg
 exec --no-startup-id polybar 
 exec --no-startup-id dunst 
 exec_always --no-startup-id picom --config ~/.config/picom.conf
