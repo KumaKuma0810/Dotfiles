@@ -1,25 +1,27 @@
 #!/bin/bash
 
-# Опции для меню выхода
-options="Logout\nReboot\nShutdown\nSuspend"
+# --- Неоновые иконки и названия ---
+options="  Logout\n  Reboot\n  Shutdown\n  Suspend\n󰜺   Cancel"
 
-# Используем rofi для отображения меню
-choice=$(echo -e "$options" | rofi -dmenu -p "Select an action:")
+# --- Вызов Rofi с кастомной темой ---
+choice=$(echo -e "$options" | rofi -dmenu -p "Выберите действие:") 
 
+# --- Действия ---
 case "$choice" in
-    "Logout")
-        i3-msg exit  # Для i3; замените на соответствующую команду для вашего WM/DE
+    *Logout)
+        i3-msg exit
         ;;
-    "Reboot")
+    *Reboot)
         systemctl reboot
         ;;
-    "Shutdown")
+    *Shutdown)
         systemctl poweroff
         ;;
-    "Suspend")
+    *Suspend)
         systemctl suspend
         ;;
     *)
-        exit 1  # Если ничего не выбрано, просто выйти
+        exit 1
         ;;
 esac
+

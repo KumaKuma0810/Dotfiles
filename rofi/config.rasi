@@ -21,11 +21,11 @@ configuration {
 }
 * {
     background: #121010;
-    background-alt: #101010FF;
-    foreground:     #bab9d2;
-    selected:       #62AEEFFF;
-    active:         #98C379FF;
-    urgent:         #E06B74FF;
+    background-alt: #0d1313;
+    foreground:     #cfc7a0;
+    selected:       #8d6135;
+    active:         #8d6135;
+    urgent:         #8d6135;
 }
 * {
     border-colour:               var(selected);
