@@ -1,12 +1,7 @@
 <h1 align="center">⚡ Welcome to my desktop ⚡</h1>
 
+![2025-06-20_09-19](https://github.com/user-attachments/assets/1bb46478-ab30-4ff6-8226-54d86b31d3ea)
 
-![2025-05-30_15-37](https://github.com/user-attachments/assets/11f8b1ed-5b53-4527-8b4d-f709ecdee817)
+![2025-06-20_10-21](https://github.com/user-attachments/assets/27b3ac15-8c05-47e0-ad26-16540c47ad1b)
 
-![2025-06-02_15-56_1](https://github.com/user-attachments/assets/b054d685-48dd-471d-a042-6c4aa01a97ff)
-
-
-
-![2025-06-02_15-57](https://github.com/user-attachments/assets/ff84c664-3018-4022-83bc-b4c076b191a6)
-
-![2025-06-02_15-54](https://github.com/user-attachments/assets/401c6e4d-3a6a-4c24-a805-1f3a21175918)
+![2025-06-20_10-09](https://github.com/user-attachments/assets/0aed17e9-509a-459c-a674-b46443db52b5)
