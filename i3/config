@@ -42,6 +42,12 @@ exec --no-startup-id xss-lock --transfer-sleep-lock -- i3lock --nofork
 # and nm-applet is a desktop environment-independent system tray GUI for it.
 exec --no-startup-id nm-applet
 
+# Увеличить яркость
+bindsym XF86MonBrightnessUp exec --no-startup-id "brightnessctl set +10% && ~/.config/dunst/scripts/brightness.sh"
+
+# Уменьшить яркость
+bindsym XF86MonBrightnessDown exec --no-startup-id "brightnessctl set 10%- && ~/.config/dunst/scripts/brightness.sh"
+
 # Use pactl to adjust volume in PulseAudio.
 set $refresh_i3status killall -SIGUSR1 i3status
 # Increase volume
@@ -50,7 +56,7 @@ bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && ~/.config/dunst/volume-indicator.sh
 
 # Следующий трек
-bindsym XF86AudioNext exec --no-startup-id ~/.config/polybar/track_notify.sh
+# bindsym XF86AudioNext exec --no-startup-id ~/.config/polybar/track_notify.sh
 #bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status;
 #bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status;
 #bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status;
@@ -208,10 +214,13 @@ bindsym $mod+r mode "resize"
 focus_follows_mouse no
 
 # Autostart
-exec --no-startup-id feh --bg-scale ~/.config/i3/moiz-k-malik-68aXi4RVhMQ-unsplash.jpg
+exec --no-startup-id feh --bg-scale ~/.config/i3/ocean_surf_foam_117846_1920x1080.jpg
 exec --no-startup-id polybar 
 exec --no-startup-id dunst 
 exec_always --no-startup-id picom --config ~/.config/picom.conf
+exec --no-startup-id ~/.config/i3/scripts/battery_watcher.sh
+exec --no-startup-id xset dpms 300 600 900
+exec_always --no-startup-id ~/.config/i3/scripts/battery-loop.sh
 
 # Window
 for_window [class=".*"] border pixel 4
@@ -226,17 +235,16 @@ new_float  pixel 0
 # Program
 bindsym $mod+d exec rofi -show drun 
 bindsym $mod+c exec vscodium
-bindsym $mod+b exec firefox --new-window ~/startpage/start_page.html
+bindsym $mod+b exec librewolf --new-window ~/startpage/start_page.html 
 bindsym $mod+shift+p exec ~/.config/rofi/scripts/rofi-logout.sh
-bindsym $mod+shift+b exec  betterlockscreen -l
-bindsym $mod+shift+f exec --no-startup-id kitty -e ranger
+bindsym $mod+Shift+b exec betterlockscreen -l blur -- --blur 0.7
+bindsym $mod+shift+f exec --no-startup-id kitty -e ranger 
 bindsym $mod+t exec firejail --noprofile torbrowser-launcher
 bindsym $mod+Shift+s exec --no-startup-id flameshot gui -p ~/Pictures/Screenshots && notify-send 
 bindsym Print exec --no-startup-id flameshot gui -p ~/Pictures && notify-send
-bindsym $mod+shift+w exec ~/.config/rofi/scripts/rofi-wifi.sh
-
+bindsym $mod+shift+w exec kitty -e nmtui
 # Language
-exec_always --no-startup-id setxkbmap -layout "us, ru" -option "grp:alt_shift_toggle" 
+# exec_always --no-startup-id setxkbmap -layout "us, ru" -option "grp:alt_shift_toggle" 
 
 # Color i3wm 
 # загружаем текущие wal цвета

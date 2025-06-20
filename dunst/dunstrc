@@ -36,7 +36,7 @@
     #       and the given value is treated as the maximum height
 
     # Position the notification in the top right corner
-    origin = top-center
+    origin = top-right
 
     # Offset from the origin
     # NOTE: Dunst from version 1.11 and older use this alternative notation
@@ -104,14 +104,14 @@
     horizontal_padding = 12
 
     # Padding between text and icon.
-    text_icon_padding = 0
+    text_icon_padding = 1
 
     # Defines width in pixels of frame around the notification window.
     # Set to 0 to disable.
     frame_width = 3
 
     # Defines color of the frame around the notification window.
-    frame_color = "#986F51"
+    frame_color = "#67949D"
 
     # Size of gap to display between notifications - requires a compositor.
     # If value is greater than 0, separator_height will be ignored and a border
@@ -210,10 +210,9 @@
     stack_duplicates = true
 
     # Hide the count of stacked notifications with the same content
-    hide_duplicate_count = false
-
+    hide_duplicate_count = true 
     # Display indicators for URLs (U) and actions (A).
-    show_indicators = yes
+    show_indicators = false 
 
     ### Icons ###
 
@@ -492,3 +491,8 @@
 #    set_stack_tag = "volume"
 #
 # vim: ft=cfg
+#
+[rule_cmus]
+appname = "cmus"
+urgency = low
+timeout = 3000

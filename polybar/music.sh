@@ -57,5 +57,42 @@ if [[ $? -eq 0 ]]; then
     exit 0
 fi
 
+# ===== MPD (ncmpcpp) =====
+MPD_STATUS=$(mpc status 2>/dev/null)
+
+if [[ $? -eq 0 ]]; then
+    STATUS=$(echo "$MPD_STATUS" | head -n 1 | awk '{print $1}')
+    SONG=$(mpc current 2>/dev/null)
+
+    if [[ -n "$SONG" ]]; then
+        # Разделяем Artist и Title (если они есть в формате "Artist - Title")
+        if [[ "$SONG" == *" - "* ]]; then
+            IFS=' - ' read -r ARTIST TITLE <<< "$SONG"
+        else
+            ARTIST=""
+            TITLE="$SONG"
+        fi
+
+        if [[ -n "$ARTIST" ]]; then
+            META="$ARTIST - $TITLE"
+        else
+            META="$TITLE"
+        fi
+
+        [[ ${#META} -gt $MAX_LENGTH ]] && META="${META:0:$MAX_LENGTH}…"
+
+        case "$STATUS" in
+            playing:) ICON="$ICON_PLAY" ;;
+            paused:)  ICON="$ICON_PAUSE" ;;
+            stopped:) ICON="$ICON_STOP" ;;
+            *)       ICON="$ICON_STOP" ;;  # Или что-то другое, если статус неизвестен
+        esac
+
+        # Управление через mpc
+        echo "%{A1:mpc prev:}$ICON_PREV%{A} %{A1:mpc toggle:}$ICON%{A} %{A1:mpc next:}$ICON_NEXT%{A}  $META"
+        exit 0
+    fi
+fi
+
 # Ничего не запущено
 exit 0
