@@ -8,7 +8,7 @@
 
 
 # Gaps
-gaps inner 10
+gaps inner 15
 gaps outer 0
 
 smart_gaps inverse_outer
@@ -55,12 +55,10 @@ bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT
 bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -5% && ~/.config/dunst/volume-indicator.sh
 bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && ~/.config/dunst/volume-indicator.sh
 
-# Следующий трек
-# bindsym XF86AudioNext exec --no-startup-id ~/.config/polybar/track_notify.sh
-#bindsym XF86AudioRaiseVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ +10% && $refresh_i3status;
-#bindsym XF86AudioLowerVolume exec --no-startup-id pactl set-sink-volume @DEFAULT_SINK@ -10% && $refresh_i3status;
-#bindsym XF86AudioMute exec --no-startup-id pactl set-sink-mute @DEFAULT_SINK@ toggle && $refresh_i3status;
-#bindsym XF86AudioMicMute exec --no-startup-id pactl set-source-mute @DEFAULT_S;
+
+bindsym XF86AudioNext exec /home/kuma/.config/dunst/scripts/playerctl-next.sh
+bindsym XF86AudioPrev exec /home/kuma/.config/dunst/scripts/playerctl-previous.sh
+bindsym XF86AudioPlay exec /home/kuma/.config/dunst/scripts/play-pause.sh
 
 
 # Use Mouse+$mod to drag floating windows to their wanted position
@@ -223,10 +221,10 @@ exec --no-startup-id xset dpms 300 600 900
 exec_always --no-startup-id ~/.config/i3/scripts/battery-loop.sh
 
 # Window
-for_window [class=".*"] border pixel 4
+for_window [class=".*"] border pixel 6
 for_window [class="^Firefox$"] border none
 # for_window [class="^kitty$"] floating enable, move position center
-
+for_window [class="^KeePassXC"] floating enable
 # Убираем оконные границы
 new_window pixel 0
 new_float  pixel 0
@@ -240,9 +238,11 @@ bindsym $mod+shift+p exec ~/.config/rofi/scripts/rofi-logout.sh
 bindsym $mod+Shift+b exec betterlockscreen -l blur -- --blur 0.7
 bindsym $mod+shift+f exec --no-startup-id kitty -e ranger 
 bindsym $mod+t exec firejail --noprofile torbrowser-launcher
-bindsym $mod+Shift+s exec --no-startup-id flameshot gui -p ~/Pictures/Screenshots && notify-send 
+bindsym $mod+Shift+s exec --no-startup-id flameshot gui --clipboard && notify-send 
 bindsym Print exec --no-startup-id flameshot gui -p ~/Pictures && notify-send
 bindsym $mod+shift+w exec kitty -e nmtui
+bindsym $mod+g exec keepassxc /home/kuma/DOC/all\ keys.kdbx
+
 # Language
 # exec_always --no-startup-id setxkbmap -layout "us, ru" -option "grp:alt_shift_toggle" 
 
