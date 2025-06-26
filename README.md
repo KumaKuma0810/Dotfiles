@@ -1,4 +1,4 @@
-<h1> ⚡ Welcome to my desktop ⚡</h1>
+<h1 align="center"> ⚡ Welcome to my desktop ⚡</h1>
 
 ![image](https://github.com/user-attachments/assets/a7bce17f-2697-43f4-87c2-10da67883ed5)
 
