@@ -41,7 +41,7 @@
     # Offset from the origin
     # NOTE: Dunst from version 1.11 and older use this alternative notation
     # offset = 10x50
-    offset = (10, 50)
+    offset = (10, 35)
 
     # Scale factor. It is auto-detected if value is 0.
     scale = 0
@@ -98,13 +98,13 @@
     separator_height = 2
 
     # Padding between text and separator.
-    padding = 12 
+    padding = 12
 
     # Horizontal padding.
-    horizontal_padding = 12
+    horizontal_padding = 18
 
     # Padding between text and icon.
-    text_icon_padding = 1
+    text_icon_padding = 10
 
     # Defines width in pixels of frame around the notification window.
     # Set to 0 to disable.
@@ -234,7 +234,7 @@
     min_icon_size = 18
 
     # Scale larger icons down to this size, set to 0 to disable
-    max_icon_size = 30
+    max_icon_size = 70
 
     # Paths to default icons (only necessary when not using recursive icon lookup)
     icon_path = /usr/share/icons/gnome/16x16/status/:/usr/share/icons/gnome/16x16/devices/
