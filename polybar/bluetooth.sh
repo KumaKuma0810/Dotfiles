@@ -1,7 +1,7 @@
 #!/bin/bash
 
-ICON_ON="󰂯 "
-ICON_OFF="󰂲 "
+ICON_ON="󰂯"
+ICON_OFF="󰂲"
 ICON_CONNECTED=" "
 
 # Проверка включён ли Bluetooth
