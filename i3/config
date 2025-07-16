@@ -213,7 +213,7 @@ focus_follows_mouse no
 
 # Autostart
 exec --no-startup-id feh --bg-scale ~/.config/i3/ocean_surf_foam_117846_1920x1080.jpg
-exec --no-startup-id polybar 
+exec --no-startup-id polybar &
 exec --no-startup-id dunst 
 exec_always --no-startup-id picom --config ~/.config/picom.conf
 exec --no-startup-id ~/.config/i3/scripts/battery_watcher.sh
@@ -232,25 +232,24 @@ new_float  pixel 0
 
 # Program
 bindsym $mod+d exec rofi -show drun 
-bindsym $mod+c exec vscodium
-bindsym $mod+b exec librewolf --new-window ~/startpage/start_page.html 
+bindsym $mod+c exec kitty -e nvim
+bindsym $mod+b exec  firefox --no-remote -P anon
 bindsym $mod+shift+p exec ~/.config/rofi/scripts/rofi-logout.sh
 bindsym $mod+Shift+b exec betterlockscreen -l blur -- --blur 0.7
 bindsym $mod+shift+f exec --no-startup-id kitty -e ranger 
-bindsym $mod+t exec firejail --noprofile torbrowser-launcher
 bindsym $mod+Shift+s exec --no-startup-id flameshot gui --clipboard && notify-send 
 bindsym Print exec --no-startup-id flameshot gui -p ~/Pictures && notify-send
 bindsym $mod+shift+w exec kitty -e nmtui
 bindsym $mod+g exec keepassxc /home/kuma/DOC/all\ keys.kdbx
 
 # Language
-# exec_always --no-startup-id setxkbmap -layout "us, ru" -option "grp:alt_shift_toggle" 
+exec_always --no-startup-id setxkbmap -layout "us, ru" -option "grp:alt_shift_toggle" 
 
 # Color i3wm 
 # загружаем текущие wal цвета
 exec_always --no-startup-id  xrdb -load ~/.cache/wal/colors.Xresources
-set_from_resource $fg i3wm.color7 #FFFFFF
-set_from_resource $bg i3wm.color2 #f0f0f0
+set_from_resource $fg i3wm.color7  #f0f0f0
+set_from_resource $bg i3wm.color2  #AAB6B9 
 
 # class                 border  backgr. text indicator child_border
 client.focused          $fg     $fg     $fg  $fg       $fg
