@@ -12,103 +12,161 @@ end
 vim.opt.rtp:prepend(lazypath)
 
 require("lazy").setup({
-  "neovim/nvim-lspconfig",
-  "hrsh7th/nvim-cmp",
-  "hrsh7th/cmp-nvim-lsp",
-  "hrsh7th/cmp-buffer",
-  "hrsh7th/vim-vsnip",
+  {
+    'neovim/nvim-lspconfig',
+    config = function()
+      -- Настройка pylsp
+      require('lspconfig').pylsp.setup{
+        -- Здесь можно добавить настройки сервера, если нужно
+        settings = {
+          pylsp = {
+            plugins = {
+              pyflakes = { enabled = true },
+              pycodestyle = { enabled = true },
+              -- Другие плагины можно настроить здесь
+            }
+          }
+        }
+      }
+    end,
+  },
+  {
+    "hrsh7th/nvim-cmp",
+    dependencies = {
+      "hrsh7th/cmp-nvim-lsp",
+      "hrsh7th/cmp-buffer",
+    },
+    config = function()
+      local cmp = require("cmp")
+      cmp.setup({
+        snippet = {
+          expand = function(args)
+            -- можно добавить сниппеты, например luasnip
+          end,
+        },
+        mapping = {
+          ["<CR>"] = cmp.mapping.confirm({ select = true }),
+          ["<C-Space>"] = cmp.mapping.complete(),
+          ["<C-e>"] = cmp.mapping.abort(),
+        },
+        sources = cmp.config.sources({
+          { name = "nvim_lsp" },
+          { name = "buffer" },
+        }),
+      })
+    end,
+  },
   {
     'goolord/alpha-nvim',
     config = function()
       local alpha = require("alpha")
       local dashboard = require("alpha.themes.dashboard")
+
+      -- Здесь можно кастомизировать ASCII арт, я оставил твой оригинальный
       dashboard.section.header.val = {
-		"⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣯⣫⣡⡿⡵⣫⣾⣿⡿⣋⣥⣶⣷⣾⣿⣿⣵⣦⣌⠻⣿⣿⣿⣿⣷⣻⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢷⠝⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿",
-		"⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠯⢱⣫⢗⡞⢕⣿⣿⢿⣾⣿⣿⣿⣿⢿⣿⣿⣿⣿⣿⣿⣜⣿⡽⣿⣿⣷⣿⣿⣿⣿⣿⣷⣹⣿⣟⢿⣿⣿⣿⣯⣇⡸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿",
-		"⣿⣿⣿⣿⣿⣿⣿⣿⡿⠀⣿⡰⡞⣿⢳⣿⣷⣿⢟⣿⣿⢏⣬⣾⡇⢿⡏⢿⣿⣿⣿⣿⡏⣿⡌⣿⣿⣿⡟⣿⣿⣿⣿⣿⣿⣿⡇⢻⣿⣿⣿⡁⢷⢿⡌⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿",
-		"⣿⣿⣿⣿⣿⣿⣿⣿⢃⠀⢣⣽⣱⡿⣿⡏⣿⣏⣾⡟⣵⣿⣿⣿⣿⡜⣯⢊⢿⣿⣿⣿⣷⣿⡇⣮⢿⣿⣿⣹⣿⣿⣿⣿⣿⣿⣷⢸⣿⣿⣿⣧⣿⡘⣿⢹⣿⣿⣿⣿⣿⣿⣿⣿⣿",
-		"⣿⣿⣿⣿⣿⣿⣿⣿⠼⢠⡽⣿⣿⠇⣿⢸⣟⣾⢯⣾⣿⣿⣿⣿⣿⣷⡜⣯⣎⢻⣿⣿⣿⣿⡇⣿⡎⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡎⣿⢻⣿⣿⣸⡇⢿⢸⣿⣿⣿⣿⣿⣿⣿⣿⣿",
-		"⣿⣿⣿⣿⣿⣧⢞⡻⣕⢸⢧⣿⣿⢸⣿⣿⣿⢄⢶⣯⣽⢿⣿⣿⣿⣿⣿⣌⢮⢒⠛⣛⡿⣿⢁⢿⣿⡼⣿⣿⣿⣷⣿⣿⣿⣿⣿⣧⢿⠘⣿⣿⣧⡇⠞⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿",
-		"⣿⣿⣿⣿⣿⣿⣾⣾⠆⣤⠘⣷⢹⣿⢹⡇⣏⣿⣷⣾⣯⣼⣿⣿⣿⣿⣟⣑⣓⡙⢣⡉⠆⡟⣼⣦⣻⣧⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠸⡆⣿⣿⣿⢗⡖⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿",
-		"⣿⣿⣿⣿⣿⣿⣿⣿⢧⢫⣰⣿⢋⡇⣮⠘⠻⢞⢿⣷⣾⣻⣿⣿⣿⣿⣿⣿⣿⡿⢆⣙⡼⢀⠻⣛⡷⣻⣽⢻⣿⣿⣿⣿⣿⣿⣿⡏⢸⣿⣿⣽⣿⡘⡇⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿",
-		"⣿⣿⣿⣿⣿⣿⣿⡟⣮⢿⡿⣿⣏⣧⠸⠀⢰⣀⢉⠒⠝⢣⣿⣿⣿⣿⣿⣿⣿⣡⣿⡑⠡⠤⠈⠊⠻⢷⠉⣾⡟⣽⣿⣿⣿⣿⢿⡇⡚⣩⣭⡭⠽⠷⠤⣭⡭⠭⣭⣭⡭⠭⢭⣝⢻",
-		"⣿⣿⣿⣿⣿⣿⣿⡇⣿⡇⢣⡏⣿⣝⡀⡇⣷⡹⣌⠳⠤⠌⢻⣿⣿⣿⣿⣿⣿⠟⠁⣀⠉⣉⠉⠉⡤⢠⡤⡀⣐⣿⣿⣻⣿⡿⣼⠃⣻⣭⣿⣶⣶⢳⣗⣶⣿⣿⣶⡶⣖⡴⣫⣴⣿",
-		"⣿⣿⣿⣿⣿⣿⣿⣧⢻⡇⢦⢏⢘⡟⣆⢻⢸⣿⣮⣯⣭⣿⣿⣿⣿⣿⣿⠟⡡⣢⣾⡻⣷⣽⣛⣛⡤⣃⣼⣳⣿⡿⣳⡟⣸⣧⣇⢺⣿⣿⣿⡿⣫⣿⠾⡟⣻⣭⡵⣺⣵⣾⣿⣿⣿",
-		"⣿⣿⣿⣿⣿⣿⣿⣿⣄⢷⢸⣣⣣⡻⡿⣆⠃⠛⢿⣿⣿⣟⣽⣛⣿⣯⣴⣿⣿⣿⣿⣿⣿⣶⣶⠞⢈⡿⢡⣿⢿⣿⣟⢰⣟⡌⠀⣺⣿⠛⢉⣪⣥⣶⠿⢛⣭⣾⣿⣿⣿⣿⣿⣿⣿",
-		"⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡍⣷⠈⢤⠻⡙⣧⣳⣄⣭⣿⣸⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣟⣥⢎⡾⣵⣿⣵⣿⠯⣲⡟⠍⢠⣶⣿⡭⠶⢟⣋⣭⣶⣿⣈⣝⣿⣿⣿⣿⣿⣿⣿⣿",
-		"⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣮⣇⠸⣦⠡⠈⠋⢿⣿⣿⣷⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⠫⢋⠜⣿⣿⡟⡡⠚⠋⠐⠖⢀⡭⡥⣰⢸⣿⣿⣿⣿⣿⣧⡜⡝⢿⣿⣿⣿⣿⣿⣿",
-		"⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣟⡞⣴⡿⣱⢸⣆⢀⢹⣿⣿⣿⡿⠿⢿⣿⣿⣿⣿⣿⣿⣿⣵⡏⢊⣿⠟⣫⡔⢀⢀⣮⠎⢰⢟⢹⡇⡏⠏⣿⣿⡏⣿⣆⢻⡽⢘⣎⢻⡿⣿⣿⣿⣿",
-		"⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡿⡺⣽⡿⡇⠊⣿⢏⣷⡝⢽⢿⣿⣯⣯⣿⣿⣿⣿⣿⣿⣿⣿⣿⡰⣚⣵⠿⢋⣴⣏⣜⣎⠆⢯⢧⣿⢸⣷⠂⢻⣿⣿⠘⣿⣕⠻⢯⠻⣆⠙⢿⣿⣿⣿",
-		"⣿⣿⣿⣿⣿⣿⣿⣿⣿⣫⡾⢷⣿⣾⣿⣿⢏⣾⣿⢳⣷⡜⢽⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠿⢃⢉⣠⣾⣿⠏⢬⢮⠈⢶⡏⣸⣿⣼⣿⣜⡈⣿⣿⣧⢻⣿⣦⠮⡟⣗⡯⣎⠻⣿⣿",
-		"⣿⣿⣿⣿⣿⣿⣿⣻⠷⢋⢴⣿⢿⣿⡿⢣⣾⣿⢧⣹⣟⣽⣷⣅⠙⢿⣿⡿⠿⠛⣛⣭⠴⣺⠵⢿⣻⣭⢄⡠⡳⡃⣬⡎⡇⣿⣿⢿⣿⣿⣻⡘⣿⣿⡌⣿⣿⣧⣓⡝⣿⠎⢳⡜⢿",
-		"⣿⣿⣿⡿⣿⢽⣾⢵⣰⣫⡿⣵⣿⠟⣡⣿⣿⣳⣷⢯⣾⡏⣸⣟⡖⡂⠠⣤⣤⣤⣤⣶⣶⡾⠿⣻⡻⠁⢈⢊⣜⣼⡟⡄⣧⢿⣿⢸⡞⣿⣷⢷⣜⣿⣿⡘⣿⣿⣧⡈⠺⣧⡈⢿⣾",
-		"⣿⢟⠙⣈⣵⢟⣽⣿⣽⣫⣾⡿⡹⣵⣷⡿⣵⡟⣴⣿⠯⢖⣻⣼⡇⠙⣶⠶⠶⠶⡶⠶⣶⣿⡟⣫⢀⣴⣢⡟⣼⣿⣷⡇⢸⡾⣿⡇⡱⠘⣿⣎⣿⣮⢿⣷⡨⡿⣿⣷⣶⡔⢕⠸⣿",
-		"⣾⢦⣾⣿⣷⣽⢟⢞⣷⡿⡫⢔⣾⣿⢋⣞⣿⣿⠋⡅⠤⠾⠿⠶⠒⡇⣿⣿⣿⣿⣿⣿⡿⣫⢞⣵⡿⣷⠟⢴⣿⣿⣰⡾⢺⣇⠹⣇⠘⣅⢮⢿⡘⣿⣷⡻⣷⠑⣝⢿⣿⣿⡧⣳⣟",
-    }
+	  "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣀⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+	  "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⣿⠟⠻⣦⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+	  "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⣿⠀⠀⠈⠻⣦⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣴⣶⣦⡀⠀⠀⠀",
+	  "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡿⡇⠀⠀⠀⠀⠈⠙⢷⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣀⣤⠾⠋⠁⢸⣿⡇⠀⠀⠀",
+	  "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣇⡇⠀⠀⠀⠀⠀⠀⠀⠙⢷⣆⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⡾⠛⠁⠀⠀⠀⣿⣼⠀⠀⠀⠀",
+	  "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠘⡏⣷⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢿⣦⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣤⡾⠛⠁⠀⠀⠀⠀⠀⣸⡿⣿⠂⠀⠀⠀",
+	  "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣇⣿⠀⠀⠀⠀⠀⠶⠶⠶⠶⠶⠶⠿⠷⠶⠶⠤⣤⣤⣀⣀⡀⢀⣤⡾⠛⠁⠀⠀⠀⠀⠀⠀⠀⢠⣿⢣⡟⠀⠀⠀⠀",
+	  "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠉⣽⠟⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣼⡷⣸⠇⠀⠀⠀⠀",
+	  "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⡇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣿⢣⡿⠁⠀⠀⠀⠀",
+	  "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⣼⠃⠀⠀⠀⠀⠀",
+	  "⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⠇⠀⣀⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢸⣿⡏⠀⠀⠀⠀⠀⠀",
+	  "⠀⠀⠀⠀⠀⠀⠀⣀⣤⣿⣿⡾⠛⠉⣉⣽⣿⣶⣤⡀⠀⠀⠀⠀⠀⠀⠀⠀⣠⣴⠶⠛⢛⣿⣿⣷⣶⣤⣀⠀⠀⠀⠀⠀⠀⢸⣿⡀⠀⠀⠀⠀⠀⠀",
+	  "⠀⠀⠀⠀⠀⠀⢰⣾⠛⢉⣵⡟⣃⣤⣶⣿⣿⣿⣿⣿⣷⡄⠀⠀⠀⠀⠀⣠⣾⠏⣡⣴⣾⣿⣿⣿⣿⣿⣿⣿⣷⡄⠀⠀⠀⠀⢈⡹⣇⠀⠀⠀⠀⠀⠀",
+	  "⠀⠀⠀⠀⠀⠀⠀⠙⣷⣾⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣀⣀⣀⣀⣰⣿⣷⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣦⠶⠖⠲⠾⣿⣿⣦⠀⠀⠀⠀⠀",
+	  "⠀⠀⠀⠀⣠⣴⡾⠋⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠛⠻⠿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠟⠀⠀⠀⠀⠀⠈⠙⢿⣄⠀⠀⠀⠀",
+	  "⠀⠀⣿⡛⠉⠁⠀⠀⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡏⠀⠀⠀⠀⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠙⢷⣄⠀⠀",
+	  "⠀⠀⣾⣷⣦⣀⠀⠀⠈⢿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⠏⠀⠀⠀⠀⠀⠘⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠻⣧⠀",
+	  "⠀⡀⠈⠻⢿⣿⣿⣷⠆⠀⠙⠻⠿⣿⣿⡿⢿⣿⠋⠀⠀⠀⣴⠇⠀⠀⠀⠈⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⢿⡄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢹⡆",
+	  "⠀⠻⣟⠛⠛⠛⠉⠁⠀⠀⠀⠀⠀⠀⠀⠀⠿⣿⣆⣀⣠⣼⢿⣧⠀⠀⠀⢀⣿⠿⢿⣿⣿⣿⣿⣿⣿⣿⠿⣛⠹⣮⣿⣄⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⣷",
+	  "⠀⠀⠈⠻⢦⣤⣀⣀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠈⠛⢩⠿⠻⣯⢻⣷⣶⣿⡿⠋⠀⠀⠀⠉⠉⠉⠉⠁⠀⣐⣭⣾⡿⠋⢻⣧⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿",
+	  "⠀⠀⠀⢀⣰⣿⣻⡏⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣴⡿⠛⣍⠡⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⢠⡟",
+	  "⠀⠀⠀⠛⣿⣿⠟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣤⡾⠋⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⡿⠁",
+	  "⠀⠀⠀⢐⣿⡿⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣴⠟⠀⠀",
+	  "⠀⠀⠀⣼⣿⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣠⡾⠃⠀⠀⠀",
+	  "⠀⠀⠀⣸⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢀⣶⡟⠀⠀⠀⠀⠀",
+	  "⠀⠀⣰⣿⡆⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣾⠛⠀⠀⠀⠀⠀⠀",
+	  "⢠⣾⢿⡿⠁⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣸⡏⠀⠀⠀⠀⠀⠀⠀",
+	  "⠀⣰⡟⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣶⣿⠀⠀⠀⠀⠀⠀⠀⠀",
+	  "⣾⢿⣾⠇⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⣿⠛⠀⠀⠀⠀⠀⠀⠀⠀",
+	  "⢀⣾⠃⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⢿⠀⠀⠀⠀⠀⠀⠀⠀⠀",
+  }
+
       dashboard.section.buttons.val = {
         dashboard.button("e", "  New file", ":ene <BAR> startinsert<CR>"),
         dashboard.button("f", "󰮗  Find file", ":Telescope find_files<CR>"),
         dashboard.button("r", "  Recent files", ":Telescope oldfiles<CR>"),
         dashboard.button("q", "󰩈  Quit", ":qa<CR>"),
       }
+
       alpha.setup(dashboard.config)
     end,
   },
-{
-  'folke/tokyonight.nvim',
-  priority = 1000,
-  lazy = false,
-  config = function()
-    vim.cmd[[colorscheme tokyonight]]
-  end
-},
-  -- lualine
-{
-	  'nvim-lualine/lualine.nvim',
-	  dependencies = { 'nvim-tree/nvim-web-devicons' },
-	  config = function()
-		require('lualine').setup({
-		  options = {
-			theme = 'tokyonight',
-			section_separators = '',
-			component_separators = '',
-		  }
-		})
-	  end
-},
-{
-     "alvarosevilla95/luatab.nvim",
-	  config = function()
-	  require("luatab").setup({
-		  -- опции конфигурации:
-		  separator = function()
-			return "▏" -- красивый разделитель
-		  end,
-		  -- таб заголовок: [№] ИМЯ_ФАЙЛА
-		  render = function(tab, tabs)
-			local win = vim.api.nvim_tabpage_get_win(tab)
-			local buf = vim.api.nvim_win_get_buf(win)
-			local bufname = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(buf), ":t")
-			local tabnr = vim.api.nvim_tabpage_get_number(tab)
-			local active = tab == vim.api.nvim_get_current_tabpage()
 
-			return (active and "●" or "○") .. " " .. tabnr .. ": " .. (bufname ~= "" and bufname or "[No Name]")
-		  end,
-	  })
-	  end,
-	  requires = 'kyazdani42/nvim-web-devicons',
-  }, 
-   {
+  -- Тема
+  {
+    'folke/tokyonight.nvim',
+    priority = 1000,
+    lazy = false,
+    config = function()
+      vim.cmd[[colorscheme tokyonight]]
+    end
+  },
+
+  -- Линия состояния
+  {
+    'nvim-lualine/lualine.nvim',
+    dependencies = { 'nvim-tree/nvim-web-devicons' },
+    config = function()
+      require('lualine').setup({
+        options = {
+          theme = 'tokyonight',
+          section_separators = '',
+          component_separators = '',
+        }
+      })
+    end
+  },
+
+  -- Вкладки
+  {
+    "alvarosevilla95/luatab.nvim",
+    requires = 'kyazdani42/nvim-web-devicons',
+    config = function()
+      require("luatab").setup({
+        separator = function() return "▏" end,
+        render = function(tab, tabs)
+          local win = vim.api.nvim_tabpage_get_win(tab)
+          local buf = vim.api.nvim_win_get_buf(win)
+          local bufname = vim.fn.fnamemodify(vim.api.nvim_buf_get_name(buf), ":t")
+          local tabnr = vim.api.nvim_tabpage_get_number(tab)
+          local active = tab == vim.api.nvim_get_current_tabpage()
+          return (active and "●" or "○") .. " " .. tabnr .. ": " .. (bufname ~= "" and bufname or "[No Name]")
+        end,
+      })
+    end,
+  },
+
+  -- Комментирование кода
+  {
     'numToStr/Comment.nvim',
     lazy = false,
     config = function()
       require('Comment').setup()
     end,
   },
+
+  -- Парсер синтаксиса
   {
     "nvim-treesitter/nvim-treesitter",
     build = ":TSUpdate",
   },
+
+  -- Терминал внизу
   {
     "akinsho/toggleterm.nvim",
     version = "*",
@@ -126,80 +184,64 @@ require("lazy").setup({
     end,
   },
   {
-	  "nvim-telescope/telescope.nvim",
-	  tag = ":latest",  -- или :latest
-	  dependencies = {
-		"nvim-lua/plenary.nvim",
-		"nvim-telescope/telescope-fzf-native.nvim", -- для более быстрого поиска
-		"nvim-tree/nvim-web-devicons", -- иконки в списках
-	  },
-	  build = "make", -- для fzf-native
-	  config = function()
-		require("telescope").setup({
-		  defaults = {
-			layout_config = { prompt_position = "top" },
-			sorting_strategy = "ascending",
-			winblend = 10,
-		  },
-		  pickers = {
-			find_files = {
-			  hidden = true,
-			},
-		  },
-		})
+    "nvim-telescope/telescope.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    config = function()
+      require("telescope").setup{}
 
-		-- Подключаем FZF
-		pcall(require("telescope").load_extension, "fzf")
-	  end,
-	},
-{
-  "nvim-tree/nvim-tree.lua",
-  dependencies = { "nvim-tree/nvim-web-devicons" },
-  config = function()
-    require("nvim-tree").setup({
-      sort_by = "case_sensitive",
-      view = {
-        width = 30,
-        side = "right",
-        preserve_window_proportions = true,
-      },
-      update_focused_file = {
-        enable = true,
-        update_cwd = true,
-        update_root = false,
-      },
-      renderer = {
-        group_empty = true,
-        highlight_git = true,
-        highlight_opened_files = "name",
-      },
-      filters = {
-        dotfiles = false,
-      },
-      git = {
-        enable = true,
-        ignore = false,
-      },
-      on_attach = function(bufnr)
-        local api = require('nvim-tree.api')
-        local opts = function(desc)
-          return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
-        end
+      local map = vim.keymap.set
+      local opts = { noremap = true, silent = true }
 
-        -- стандартные маппинги
-        api.config.mappings.default_on_attach(bufnr)
+      map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts)
+      map("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", opts)
+    end,
+  },
 
-        -- ваши кастомные маппинги
-        vim.keymap.set('n', 'l', api.node.open.edit, opts('Open'))
-        vim.keymap.set('n', '<CR>', api.node.open.edit, opts('Open'))
-        vim.keymap.set('n', 'v', api.node.open.vertical, opts('Open: Vertical Split'))
-        vim.keymap.set('n', 's', api.node.open.horizontal, opts('Open: Horizontal Split'))
-        vim.keymap.set('n', 't', api.node.open.tab, opts('Open: New Tab'))
-      end,
-    })
-  end,
-}
 
+  -- Файловый менеджер
+  {
+    "nvim-tree/nvim-tree.lua",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    config = function()
+      require("nvim-tree").setup({
+        sort_by = "case_sensitive",
+        view = {
+          width = 30,
+          side = "right",
+          preserve_window_proportions = true,
+        },
+        update_focused_file = {
+          enable = true,
+          update_cwd = true,
+          update_root = false,
+        },
+        renderer = {
+          group_empty = true,
+          highlight_git = true,
+          highlight_opened_files = "name",
+        },
+        filters = {
+          dotfiles = false,
+        },
+        git = {
+          enable = true,
+          ignore = false,
+        },
+        on_attach = function(bufnr)
+          local api = require('nvim-tree.api')
+          local opts = function(desc)
+            return { desc = "nvim-tree: " .. desc, buffer = bufnr, noremap = true, silent = true, nowait = true }
+          end
+          api.config.mappings.default_on_attach(bufnr)
+          vim.keymap.set('n', 'l', api.node.open.edit, opts('Open'))
+          vim.keymap.set('n', '<CR>', api.node.open.edit, opts('Open'))
+          vim.keymap.set('n', 'v', api.node.open.vertical, opts('Open: Vertical Split'))
+          vim.keymap.set('n', 's', api.node.open.horizontal, opts('Open: Horizontal Split'))
+          vim.keymap.set('n', 't', api.node.open.tab, opts('Open: New Tab'))
+        end,
+      })
+    end,
+  },
 })
 
 -- █ [3] Цвета и оформление
@@ -208,10 +250,9 @@ vim.o.cursorline = true
 vim.o.number = true
 vim.o.signcolumn = "yes"
 
-
 -- █ [4] Базовые настройки редактора
 vim.o.mouse = "a"
-vim.o.clipboard = "unnamedplus"
+vim.o.clipboard = "unnamedplus"  -- чтобы использовать системный буфер обмена
 vim.o.tabstop = 4
 vim.o.shiftwidth = 4
 vim.o.smartindent = true
@@ -227,44 +268,36 @@ vim.o.timeoutlen = 500
 vim.o.splitbelow = true
 vim.o.splitright = true
 
--- Прозрачный фон 
+-- Прозрачный фон
 vim.cmd [[
   highlight Normal guibg=NONE ctermbg=NONE
   highlight NormalNC guibg=NONE ctermbg=NONE
   highlight EndOfBuffer guibg=NONE ctermbg=NONE
   highlight LineNr guibg=NONE ctermbg=NONE
-  highlight SignColumn guibg=NONE ctermbg=NONE
-  highlight VertSplit guibg=NONE ctermbg=NONE
 ]]
 
-
--- Автосохранение при выходе из insert
+-- Автосохранение при выходе из режима вставки
 vim.api.nvim_create_autocmd("InsertLeave", {
   pattern = "*",
   command = "silent! wall",
 })
 
--- Luatab
+-- Luatab — кастомные табы с иконками и git-статусом
 require("luatab").setup({
   separator = function()
     return "  "
   end,
-
   render = function(tab, tabs)
     local win = vim.api.nvim_tabpage_get_win(tab)
     local buf = vim.api.nvim_win_get_buf(win)
     local bufname = vim.api.nvim_buf_get_name(buf)
     local filename = vim.fn.fnamemodify(bufname, ":t")
-    local tabnr = vim.api.nvim_tabpage_get_number(tab)
     local active = tab == vim.api.nvim_get_current_tabpage()
 
-    -- Имя файла
     if filename == "" then filename = "[No Name]" end
 
-    -- Иконка (если есть)
-    local icon, iconhl = require("nvim-web-devicons").get_icon(filename, vim.fn.fnamemodify(filename, ":e"), { default = true })
+    local icon, _ = require("nvim-web-devicons").get_icon(filename, vim.fn.fnamemodify(filename, ":e"), { default = true })
 
-    -- Git статус
     local git_status = ""
     local gsd = vim.b[buf].gitsigns_status_dict
     if gsd then
@@ -273,29 +306,25 @@ require("luatab").setup({
       if gsd.removed and gsd.removed > 0 then git_status = git_status .. "-" end
     end
 
-    -- Цвет
     local hl_group = active and "%#TabLineSel#" or "%#TabLine#"
 
-    return string.format("%s %s %s %s %s", hl_group, icon, filename, git_status, hl_group)
+    return string.format("%s %s %s %s %s", hl_group, icon or "", filename, git_status, hl_group)
   end,
 })
 
+-- Хайлайты для табов
 vim.cmd [[
   highlight TabLine guibg=NONE guifg=#666666 gui=none
   highlight TabLineSel guibg=#5f87ff guifg=#ffffff gui=bold
   highlight TabLineFill guibg=NONE
 ]]
 
-
+-- Горячие клавиши для табов
 local map = vim.keymap.set
 map("n", "<Tab>", ":tabnext<CR>", { noremap = true, silent = true })
 map("n", "<S-Tab>", ":tabprev<CR>", { noremap = true, silent = true })
 map("n", "<Leader>tn", ":tabnew<CR>", { noremap = true, silent = true })
 map("n", "<Leader>tc", ":tabclose<CR>", { noremap = true, silent = true })
-
-
--- █ [5] LSP Pyright
-require("lspconfig").pyright.setup{}
 
 -- █ [6] Автодополнение (nvim-cmp)
 local cmp = require("cmp")
@@ -316,25 +345,23 @@ cmp.setup({
   },
 })
 
--- █ [7] Treesitter
+-- █ [7] Treesitter (подсветка синтаксиса)
 require("nvim-treesitter.configs").setup({
   ensure_installed = { "python" },
   highlight = { enable = true },
 })
 
--- █ [9] NERDTree
+-- █ [9] Nvim-tree — файловый менеджер
 vim.api.nvim_set_keymap('n', '<C-n>', ':NvimTreeToggle<CR>', { noremap = true, silent = true })
-vim.api.nvim_buf_set_keymap(0, "n", "<C-o>", ":call NERDTreeOpenInNewTab()<CR>", { noremap = true, silent = true })
 
+-- Автоматическое открытие NvimTree при загрузке, если он не открыт
 vim.api.nvim_create_autocmd("BufReadPost", {
   callback = function()
     local api = require("nvim-tree.api")
-    -- Проверяем, открыт ли уже nvim-tree, чтобы не открывать повторно
     local is_tree_open = false
     for _, win in ipairs(vim.api.nvim_list_wins()) do
       local buf = vim.api.nvim_win_get_buf(win)
-      local ft = vim.api.nvim_buf_get_option(buf, "filetype")
-      if ft == "NvimTree" then
+      if vim.api.nvim_buf_get_option(buf, "filetype") == "NvimTree" then
         is_tree_open = true
         break
       end
@@ -344,39 +371,38 @@ vim.api.nvim_create_autocmd("BufReadPost", {
     end
   end,
 })
+
+-- Прозрачный фон NvimTree
 vim.cmd [[
   highlight NvimTreeNormal guibg=NONE
   highlight NvimTreeNormalNC guibg=NONE
 ]]
 
-
--- LSP keybindings
+-- █ LSP keybindings
 local opts = { noremap = true, silent = true }
-vim.keymap.set("n", "gd", vim.lsp.buf.definition, opts)
-vim.keymap.set("n", "K", vim.lsp.buf.hover, opts)
-vim.keymap.set("n", "<leader>rn", vim.lsp.buf.rename, opts)
-vim.keymap.set("n", "<leader>ca", vim.lsp.buf.code_action, opts)
-vim.keymap.set("n", "<leader>f", function() vim.lsp.buf.format() end, opts)
+map("n", "gd", vim.lsp.buf.definition, opts)
+map("n", "K", vim.lsp.buf.hover, opts)
+map("n", "<leader>rn", vim.lsp.buf.rename, opts)
+map("n", "<leader>ca", vim.lsp.buf.code_action, opts)
+map("n", "<leader>f", function() vim.lsp.buf.format() end, opts)
 
--- Terminal toggle
-vim.keymap.set("n", "<C-t>", function()
+-- █ Terminal toggle (toggleterm)
+map("n", "<C-t>", function()
   local dir = vim.fn.expand("%:p:h")
   vim.cmd("ToggleTerm dir=" .. dir)
 end, { noremap = true, silent = true })
 
-vim.keymap.set('t', '<Esc>', [[<C-\><C-n>]], { noremap = true, silent = true })
+map('t', '<Esc>', [[<C-\><C-n>]], { noremap = true, silent = true })
 
--- Comment.nvim keymaps
-vim.keymap.set('n', '<a-/>', function() require('Comment.api').toggle.linewise.current() end, { noremap = true, silent = true })
-vim.keymap.set('v', '<a-/>', function() require('Comment.api').toggle.linewise(vim.fn.visualmode()) end, { noremap = true, silent = true })
+-- █ Comment.nvim — удобное комментирование
+map('n', '<a-/>', function() require('Comment.api').toggle.linewise.current() end, { noremap = true, silent = true })
+map('v', '<a-/>', function() require('Comment.api').toggle.linewise(vim.fn.visualmode()) end, { noremap = true, silent = true })
 
--- Telescope 
-local map = vim.keymap.set
-local opts = { noremap = true, silent = true }
-
+-- █ Telescope — быстрый поиск
 map("n", "<leader>ff", "<cmd>Telescope find_files<cr>", opts)
 map("n", "<leader>fg", "<cmd>Telescope live_grep<cr>", opts)
 map("n", "<leader>fb", "<cmd>Telescope buffers<cr>", opts)
 map("n", "<leader>fh", "<cmd>Telescope help_tags<cr>", opts)
 map("n", "<leader>gc", "<cmd>Telescope git_commits<cr>", opts)
 map("n", "<leader>gs", "<cmd>Telescope git_status<cr>", opts)
+

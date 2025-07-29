@@ -21,7 +21,7 @@ set $mod Mod4
 
 # Font for window titles. Will also be used by the bar unless a different font
 # is used in the bar {} block below.
-font pango:JetBrainsMono Nerd Font Mono 11
+font pango: JetBrainsMono Nerd Font 11
 
 # This font is widely installed, provides lots of unicode glyphs, right-to-left
 # text rendering and scalability on retina/hidpi displays (thanks to pango).
@@ -212,7 +212,7 @@ bindsym $mod+r mode "resize"
 focus_follows_mouse no
 
 # Autostart
-exec --no-startup-id feh --bg-scale ~/.config/i3/ocean_surf_foam_117846_1920x1080.jpg
+exec --no-startup-id feh --bg-scale ~/.config/i3/anime-girl-nun-tongue-out-cyberpunk-4k-wallpaper-uhdpaper.com-291@5@b.jpg
 exec --no-startup-id polybar &
 exec --no-startup-id dunst 
 exec_always --no-startup-id picom --config ~/.config/picom.conf
@@ -230,32 +230,30 @@ new_window pixel 0
 new_float  pixel 0
 
 
-# Program
-bindsym $mod+d exec rofi -show drun 
+bindsym $mod+d exec rofi -show drun
 bindsym $mod+c exec kitty -e nvim
-bindsym $mod+b exec  firefox --no-remote -P anon
-bindsym $mod+shift+p exec ~/.config/rofi/scripts/rofi-logout.sh
+bindsym $mod+b exec  firefox -P anon -no-remote
+bindsym $mod+shift+p exec /home/kuma/.config/rofi/scripts/logout.sh
 bindsym $mod+Shift+b exec betterlockscreen -l blur -- --blur 0.7
 bindsym $mod+shift+f exec --no-startup-id kitty -e ranger 
 bindsym $mod+Shift+s exec --no-startup-id flameshot gui --clipboard && notify-send 
 bindsym Print exec --no-startup-id flameshot gui -p ~/Pictures && notify-send
 bindsym $mod+shift+w exec kitty -e nmtui
-bindsym $mod+g exec keepassxc /home/kuma/DOC/all\ keys.kdbx
+bindsym $mod+g exec keepassxc /home/kuma/DOC/all\ keys.kdbx 
 
 # Language
 exec_always --no-startup-id setxkbmap -layout "us, ru" -option "grp:alt_shift_toggle" 
+# Цветовая схема — Космос/Фиолет
+set $bg         #00010D
+set $fg         #A305A6
+set $accent     #660273
+set $accent2    #2D0140
+set $inactive   #010326
+set $urgent     #A305A6
 
-# Color i3wm 
-# загружаем текущие wal цвета
-exec_always --no-startup-id  xrdb -load ~/.cache/wal/colors.Xresources
-set_from_resource $fg i3wm.color7  #f0f0f0
-set_from_resource $bg i3wm.color2  #AAB6B9 
-
-# class                 border  backgr. text indicator child_border
-client.focused          $fg     $fg     $fg  $fg       $fg
-client.focused_inactive $bg     $bg     $fg  $bg       $bg
-client.unfocused        $bg     $bg     $fg  $bg       $bg
-client.urgent           $bg     $bg     $fg  $bg       $bg
-client.placeholder      $bg     $bg     $fg  $bg       $bg
-
+client.focused          $accent $accent $fg $accent2
+client.unfocused        $inactive $inactive $fg $bg
+client.urgent           $urgent $urgent $fg $bg
+client.placeholder      $inactive $inactive $fg $bg
 client.background       $bg
+
