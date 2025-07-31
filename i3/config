@@ -8,7 +8,7 @@
 
 
 # Gaps
-gaps inner 15
+gaps inner 20
 gaps outer 0
 
 smart_gaps inverse_outer
@@ -212,7 +212,7 @@ bindsym $mod+r mode "resize"
 focus_follows_mouse no
 
 # Autostart
-exec --no-startup-id feh --bg-scale ~/.config/i3/anime-girl-nun-tongue-out-cyberpunk-4k-wallpaper-uhdpaper.com-291@5@b.jpg
+exec --no-startup-id feh --bg-scale ~/.config/i3/backiee-230629-landscape.jpg
 exec --no-startup-id polybar &
 exec --no-startup-id dunst 
 exec_always --no-startup-id picom --config ~/.config/picom.conf
@@ -243,17 +243,12 @@ bindsym $mod+g exec keepassxc /home/kuma/DOC/all\ keys.kdbx
 
 # Language
 exec_always --no-startup-id setxkbmap -layout "us, ru" -option "grp:alt_shift_toggle" 
-# Цветовая схема — Космос/Фиолет
-set $bg         #00010D
-set $fg         #A305A6
-set $accent     #660273
-set $accent2    #2D0140
-set $inactive   #010326
-set $urgent     #A305A6
-
-client.focused          $accent $accent $fg $accent2
-client.unfocused        $inactive $inactive $fg $bg
-client.urgent           $urgent $urgent $fg $bg
-client.placeholder      $inactive $inactive $fg $bg
-client.background       $bg
+exec_always --no-startup-id bash -c 'source ~/.cache/wal/colors.sh && \
+  i3-msg "set \$bg ${background}"; \
+  i3-msg "set \$fg ${foreground}"; \
+  i3-msg "set \$color0 ${color0}"; \
+  i3-msg "set \$color1 ${color1}"; \
+  i3-msg "set \$color2 ${color2}"; \
+  i3-msg "set \$color3 ${color3}"; \
+  i3-msg "set \$color8 ${color8}"'
 
